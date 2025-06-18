@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-event
+    ports:
+      - "5672:5672"     # AMQP
+      - "15672:15672"   # Management UI (http://localhost:15672, guest/guest)
+    networks:
+      - backend
+
+  user-service:
+    build:
+      context: ./rabbitmq_amqp_test_user_service    # Dockerfile 위치한 폴더
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8081:8080"
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+
+  notification-service:
+    build:
+      context: ./rabbitmq_amqp_test_notification_service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "8082:8080"
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+
+networks:
+  backend:
+    driver: bridge
