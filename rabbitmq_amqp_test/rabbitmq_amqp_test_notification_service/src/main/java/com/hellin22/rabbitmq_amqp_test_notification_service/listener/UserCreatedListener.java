@@ -68,11 +68,13 @@ public class UserCreatedListener {
     }
 
 
-
+    // ------------headers---------------
 
     // 4. exchange type = headers
     // headers의 경우 명시적 제어(Bean 등록이 필수)
-    public void headers(String headers){
-        System.out.println("headers의 headers: " + headers);
+    // headers의 경우 routing key 상관 x
+    @RabbitListener(queues = "chat-header.onlyheader")
+    public void headers(String headerLog){
+        System.out.println("headers의 log는: " + headerLog);
     }
 }

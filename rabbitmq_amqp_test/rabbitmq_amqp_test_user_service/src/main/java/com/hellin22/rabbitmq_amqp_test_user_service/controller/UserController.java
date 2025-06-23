@@ -41,11 +41,23 @@ public class UserController {
 
     // exchange type = fanout
     @PostMapping("/fanout")
-    public String createFanout1(@RequestParam String memberId,
+    public String createFanout(@RequestParam String memberId,
                                @RequestParam String memberName) {
         try {
             eventPublisher.publishFanoutLog(new MemberDto(memberId, memberName));
             return memberId + " " + memberName + "의 fanout 이벤트";
+        } catch (Exception e) {
+            throw new RuntimeException("유저 생성 실패했습니다.", e);
+        }
+    }
+
+    // exchange type = headers
+    @PostMapping("/headers")
+    public String createHeaders(@RequestParam String memberId,
+                                @RequestParam String memberName) {
+        try {
+            eventPublisher.publishHeadersLog(new MemberDto(memberId, memberName));
+            return memberId + " " + memberName + "의 header 이벤트";
         } catch (Exception e) {
             throw new RuntimeException("유저 생성 실패했습니다.", e);
         }
