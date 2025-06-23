@@ -27,4 +27,27 @@ public class UserController {
         }
     }
 
+    // exchange type = topic
+    @PostMapping("/topic")
+    public String createTopic(@RequestParam String memberId,
+                              @RequestParam String memberName) {
+        try {
+            eventPublisher.publishTopicLog(new MemberDto(memberId, memberName));
+            return memberId + " " + memberName + "의 topic 이벤트";
+        } catch (Exception e) {
+            throw new RuntimeException("유저 생성 실패했습니다.", e);
+        }
+    }
+
+    // exchange type = fanout
+    @PostMapping("/fanout")
+    public String createFanout1(@RequestParam String memberId,
+                               @RequestParam String memberName) {
+        try {
+            eventPublisher.publishFanoutLog(new MemberDto(memberId, memberName));
+            return memberId + " " + memberName + "의 fanout 이벤트";
+        } catch (Exception e) {
+            throw new RuntimeException("유저 생성 실패했습니다.", e);
+        }
+    }
 }
