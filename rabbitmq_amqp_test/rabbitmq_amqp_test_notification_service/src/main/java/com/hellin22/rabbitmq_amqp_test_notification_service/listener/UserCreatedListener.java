@@ -16,8 +16,8 @@ public class UserCreatedListener {
             exchange = @Exchange(name = "user.events", type = "direct"),
             key = "user.created"
     ))
-    public void onUserCreated(String userId) {
-        System.out.println("userId는: " + userId);
+    public void onUserCreated(String msg) {
+        System.out.println("msg: " + msg);
     }
     // 경국 Map을 전달해서 문제였음. 이거는 convertor를 잘 달아서 해결 가능할듯?
 //    public void onUserCreated(Map<String, Object> message) {
