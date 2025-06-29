@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-stress-test
+    ports:
+      - "5672:5672"     # AMQP
+      - "15672:15672"   # Management UI
+      - "15692:15692"   # Prometheus
+      - "61613:61613"   # STOMP
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    command: >
+      bash -c "rabbitmq-plugins enable --offline rabbitmq_stomp && \
+               rabbitmq-plugins enable --offline rabbitmq_prometheus && \
+               rabbitmq-server"
+    networks:
+      - rmq-net
+
+  # rabbitmq Prometheus plugin을 사용해서 필요없어짐.
+  # rabbitmq-exporter:
+  #   image: kbudde/rabbitmq-exporter
+  #   container_name: rabbitmq-exporter
+  #   ports:
+  #     - "9419:9419"
+  #   environment:
+  #     RABBIT_URL: http://guest:guest@rabbitmq-stress-test:15672
+  #   depends_on:
+  #     - rabbitmq
+  #   networks:
+  #     - rmq-net
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - rabbitmq-exporter
+    networks:
+      - rmq-net
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    networks:
+      - rmq-net
+
+  stress-test-service:
+    build:
+      context: ./rabbitmq-stress-test-service
+      dockerfile: Dockerfile
+    container_name: stress-test-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+    networks:
+      - rmq-net
+  
+  k6:
+    image: grafana/k6
+    container_name: k6-tester
+    volumes:
+      - ./test.js:/test.js
+    command: run /test.js
+    depends_on:
+      - stress-test-service
+    networks:
+      - rmq-net
+
+networks:
+  rmq-net:
