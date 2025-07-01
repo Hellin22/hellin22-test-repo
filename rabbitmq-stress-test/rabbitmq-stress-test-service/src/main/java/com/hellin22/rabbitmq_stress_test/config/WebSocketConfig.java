@@ -1,6 +1,8 @@
 package com.hellin22.rabbitmq_stress_test.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -10,6 +12,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Autowired
+    private StompInterceptor stompInterceptor;
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompInterceptor);
+    }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -21,11 +31,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableStompBrokerRelay("/topic", "/queue")
-                .setRelayHost("rabbitmq") // RabbitMQ 주소
-                .setRelayPort(61613) // STOMP 포트
-                .setClientLogin("guest")
-                .setClientPasscode("guest");
 
         // RabbitMQ는 /가 아닌 .을 지원하기 떄문에 설정
         registry.setPathMatcher(new AntPathMatcher("."));
@@ -34,5 +39,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
 //        registry.enableSimpleBroker("/topic", "/queue"); // relay 말고 simple
 //        registry.setApplicationDestinationPrefixes("/app");
+
+        registry.enableStompBrokerRelay("/topic", "/queue")
+                .setRelayHost("rabbitmq") // RabbitMQ 주소
+                .setRelayPort(61613) // STOMP 포트
+                .setClientLogin("guest")
+                .setClientPasscode("guest");
+
     }
 }
