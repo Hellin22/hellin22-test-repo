@@ -40,7 +40,7 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
-      - rabbitmq-exporter
+      - rabbitmq
     networks:
       - rmq-net
 
@@ -72,9 +72,10 @@ services:
   k6:
     image: grafana/k6
     container_name: k6-tester
+    command: run /test.js --summary-export=/result.json
     volumes:
       - ./test.js:/test.js
-    command: run /test.js
+      - ./result.json:/result.json
     depends_on:
       - stress-test-service
     networks:

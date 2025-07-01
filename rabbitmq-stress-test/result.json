@@ -1,0 +1,82 @@
+{
+    "root_group": {
+        "groups": {},
+        "checks": {
+                "WebSocket connected (status 101)": {
+                    "name": "WebSocket connected (status 101)",
+                    "path": "::WebSocket connected (status 101)",
+                    "id": "e986e2e921f84f2d58feac4f8e0bfccc",
+                    "passes": 26614,
+                    "fails": 11845
+                }
+            },
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "metrics": {
+        "ws_sessions": {
+            "count": 40154,
+            "rate": 668.0442745706438
+        },
+        "data_sent": {
+            "count": 12819541,
+            "rate": 213279.39850758645
+        },
+        "data_received": {
+            "count": 4260308,
+            "rate": 70878.97512844326
+        },
+        "ws_msgs_sent": {
+            "count": 87872,
+            "rate": 1461.9312271522542
+        },
+        "ws_msgs_received": {
+            "count": 1768,
+            "rate": 29.41431183545595
+        },
+        "iterations": {
+            "rate": 639.8444676921948,
+            "count": 38459
+        },
+        "vus": {
+            "value": 3176,
+            "min": 0,
+            "max": 25000
+        },
+        "ws_connecting": {
+            "p(95)": 35121.423538899995,
+            "avg": 13996.412896524345,
+            "min": 5.069059,
+            "med": 4046.2876484999997,
+            "max": 60002.648695,
+            "p(90)": 30010.4573768
+        },
+        "ws_session_duration": {
+            "avg": 19042.73695562855,
+            "min": 8271.02185,
+            "med": 13864.845671,
+            "max": 59968.672628,
+            "p(90)": 30002.9233442,
+            "p(95)": 30435.0404833
+        },
+        "checks": {
+            "passes": 26614,
+            "fails": 11845,
+            "value": 0.6920096726383941
+        },
+        "vus_max": {
+            "value": 25000,
+            "min": 15451,
+            "max": 25000
+        },
+        "iteration_duration": {
+            "max": 59968.727048,
+            "p(90)": 30003.204475399998,
+            "p(95)": 30436.1699081,
+            "avg": 19045.13273397255,
+            "min": 8271.226694,
+            "med": 13866.341539
+        }
+    }
+}
