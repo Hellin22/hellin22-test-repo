@@ -1,17 +1,17 @@
 package com.hellin22.kafkaTestService.producer;
 
+import com.hellin22.kafkaTestService.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class KafkaProducer {
+public class KafkaMessageProducer {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, ChatMessage> kafkaTemplate;
 
-    public void sendMessage(String topic, String message) {
+    public void send(String topic, ChatMessage message) {
         kafkaTemplate.send(topic, message);
-        System.out.println("Kafka 메시지 전송 완료: " + message);
     }
 }
