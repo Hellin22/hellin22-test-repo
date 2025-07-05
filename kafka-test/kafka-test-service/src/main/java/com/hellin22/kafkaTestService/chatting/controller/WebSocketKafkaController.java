@@ -1,7 +1,7 @@
-package com.hellin22.kafkaTestService.controller;
+package com.hellin22.kafkaTestService.chatting.controller;
 
-import com.hellin22.kafkaTestService.dto.ChatMessage;
-import com.hellin22.kafkaTestService.producer.KafkaMessageProducer;
+import com.hellin22.kafkaTestService.chatting.dto.ChatMessage;
+import com.hellin22.kafkaTestService.chatting.producer.KafkaMessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;

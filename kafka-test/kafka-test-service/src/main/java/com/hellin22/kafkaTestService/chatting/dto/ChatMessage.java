@@ -1,4 +1,4 @@
-package com.hellin22.kafkaTestService.dto;
+package com.hellin22.kafkaTestService.chatting.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.hellin22.kafkaTestService.config;
 
-import com.hellin22.kafkaTestService.dto.ChatMessage;
+import com.hellin22.kafkaTestService.chatting.dto.ChatMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;

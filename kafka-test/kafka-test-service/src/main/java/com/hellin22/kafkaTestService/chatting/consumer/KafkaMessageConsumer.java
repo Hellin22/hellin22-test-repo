@@ -1,6 +1,6 @@
-package com.hellin22.kafkaTestService.consumer;
+package com.hellin22.kafkaTestService.chatting.consumer;
 
-import com.hellin22.kafkaTestService.dto.ChatMessage;
+import com.hellin22.kafkaTestService.chatting.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
