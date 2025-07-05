@@ -14,7 +14,7 @@ public class KafkaMessageConsumer {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    @KafkaListener(topics = "chat-topic", groupId = "websocket-group")
+    @KafkaListener(topics = "chat-topic", groupId = "websocket-group",containerFactory = "chatMessageListenerContainerFactory")
     public void consume(ChatMessage message) {
         log.info("Used message channel = {}", messagingTemplate.getMessageChannel().getClass());
         // 메시지를 채팅방 ID 기준으로 전달 가능
