@@ -50,7 +50,7 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, String> stringConsumerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "dlq-group"); // DLQ 용으로 그룹명 따로 주는 게 좋아
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "dlq-group"); // DLQ 용으로 그룹명 따로 주는 게 좋다.
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(config);
@@ -72,12 +72,11 @@ public class KafkaConsumerConfig {
     // 3. Kafka Listener Container 설정 (수동 ack + 에러 핸들러 주입)
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> dlqListenerContainerFactory(
-            ConsumerFactory<String, String> consumerFactory,
             DefaultErrorHandler errorHandler) {
 
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory);
+        factory.setConsumerFactory(stringConsumerFactory());
         factory.setCommonErrorHandler(errorHandler); // 에러 발생시 동작
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         return factory;
