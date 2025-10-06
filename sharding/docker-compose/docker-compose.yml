@@ -1,0 +1,42 @@
+
+services:
+  mysql-shard0:
+    image: mysql:8.0
+    container_name: mysql-shard0
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: shard0
+    ports:
+      - "3306:3306"
+    volumes:
+      - shard0-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  mysql-shard1:
+    image: mysql:8.0
+    container_name: mysql-shard1
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: shard1
+    ports:
+      - "3307:3306"
+    volumes:
+      - shard1-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  mysql-shard2:
+    image: mysql:8.0
+    container_name: mysql-shard2
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: shard2
+    ports:
+      - "3308:3306"
+    volumes:
+      - shard2-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  shard0-data:
+  shard1-data:
+  shard2-data:
