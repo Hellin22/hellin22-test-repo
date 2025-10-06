@@ -27,9 +27,9 @@ public class KafkaConsumerConfig {
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "websocket-group");
-                // 카프카 컨슈머 그룹 id -> 같은 곳은 안받음.
-                // 즉, 스프링 서버가 여러대로 scale out 한다고 해도 같은 group_id으로 컨슈머 그룹을 만들고 있기 때문에 중복해서 메시지를 읽지는 않음
-                config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        // 카프카 컨슈머 그룹 id -> 같은 곳은 안받음.
+        // 즉, 스프링 서버가 여러대로 scale out 한다고 해도 같은 group_id으로 컨슈머 그룹을 만들고 있기 때문에 중복해서 메시지를 읽지는 않음
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(ChatMessage.class));
@@ -72,13 +72,27 @@ public class KafkaConsumerConfig {
     // 3. Kafka Listener Container 설정 (수동 ack + 에러 핸들러 주입)
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> dlqListenerContainerFactory(
+            ConsumerFactory<String, String> stringConsumerFactory, // spring bean 주입
             DefaultErrorHandler errorHandler) {
 
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(stringConsumerFactory());
+        factory.setConsumerFactory(stringConsumerFactory);
         factory.setCommonErrorHandler(errorHandler); // 에러 발생시 동작
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL); // 수동 ack모드
         return factory;
+    }
+
+    // -------------------------------------------------------------------
+    // DLQ consumer -> dlq로 온 메시지들을 다시 토픽으로 전송하는 consumer
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> dlqMessageConsumerContainerFactory(
+            ConsumerFactory<String, String> stringConsumerFactory) {
+
+        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(stringConsumerFactory);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        return factory; // 에러 핸들러 없음
     }
 }
