@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    shard0:
+      jdbc-url: jdbc:mysql://localhost:3306/shard0
+      username: root
+      password: 1234
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    shard1:
+      jdbc-url: jdbc:mysql://localhost:3307/shard1
+      username: root
+      password: 1234
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    shard2:
+      jdbc-url: jdbc:mysql://localhost:3308/shard2
+      username: root
+      password: 1234
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
