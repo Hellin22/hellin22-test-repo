@@ -1,4 +1,3 @@
-
 services:
   mysql-shard0:
     image: mysql:8.0
@@ -10,6 +9,7 @@ services:
       - "3306:3306"
     volumes:
       - shard0-data:/var/lib/mysql
+      - ./init-shard0.sql:/docker-entrypoint-initdb.d/init.sql
     command: --default-authentication-plugin=mysql_native_password
 
   mysql-shard1:
@@ -22,6 +22,7 @@ services:
       - "3307:3306"
     volumes:
       - shard1-data:/var/lib/mysql
+      - ./init-shard1.sql:/docker-entrypoint-initdb.d/init.sql
     command: --default-authentication-plugin=mysql_native_password
 
   mysql-shard2:
@@ -34,6 +35,9 @@ services:
       - "3308:3306"
     volumes:
       - shard2-data:/var/lib/mysql
+      - ./init-shard2.sql:/docker-entrypoint-initdb.d/init.sql
+      # 로컬 파일 init.sql을 컨테이너의 /docker-entrypoint-initdb.d/init.sql에 마운트
+      # 컨테이너가 컨테이너 내부 entrypoint의 init.sql을 읽을 때 로컬의 init.sql을 읽는 것
     command: --default-authentication-plugin=mysql_native_password
 
 volumes:
