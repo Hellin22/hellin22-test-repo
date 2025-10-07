@@ -1,6 +1,6 @@
 package com.hellin22.sharding.service;
 
-import com.hellin22.sharding.context.DataSourceContextHolder;
+import com.hellin22.sharding.config.RoutingDataSource;
 import com.hellin22.sharding.entity.User;
 import com.hellin22.sharding.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +25,12 @@ public class UserService {
     public User findById(Long userId) {
         try {
             String shardKey = determineShardKey(userId);
-            DataSourceContextHolder.setDataSourceKey(shardKey);
+            RoutingDataSource.setDataSourceKey(shardKey);
 
             return userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User not found: " + userId));
         } finally {
-            DataSourceContextHolder.clearDataSourceKey();
+            RoutingDataSource.clearDataSourceKey();
         }
     }
 
@@ -38,11 +38,11 @@ public class UserService {
     public User save(User user) {
         try {
             String shardKey = determineShardKey(user.getId());
-            DataSourceContextHolder.setDataSourceKey(shardKey);
+            RoutingDataSource.setDataSourceKey(shardKey);
 
             return userRepository.save(user);
         } finally {
-            DataSourceContextHolder.clearDataSourceKey();
+            RoutingDataSource.clearDataSourceKey();
         }
     }
 }
