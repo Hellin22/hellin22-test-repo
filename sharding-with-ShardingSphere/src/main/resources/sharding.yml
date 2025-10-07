@@ -1,0 +1,50 @@
+dataSources:
+  ds0:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3307/db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: user
+    password: 1234
+  ds1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3308/db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: user
+    password: 1234
+  ds2:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3309/db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: user
+    password: 1234
+rules:
+  - !SHARDING
+    tables: # 샤딩할 테이블
+      user:
+        actualDataNodes: ds${0..2}.user
+        keyGenerateStrategy:
+          column: user_id
+          keyGeneratorName: snowflake
+
+    defaultDatabaseStrategy: # 데이터베이스 샤딩 전략
+      standard:
+        shardingColumn: user_id
+        shardingAlgorithmName: database_inline
+
+    defaultTableStrategy:
+      none:
+
+    shardingAlgorithms: # 샤딩 알고리즘
+      database_inline:
+        type: INLINE
+        props:
+          algorithm-expression: ds${user_id % 3}
+
+    keyGenerators: # 키 생성기
+      snowflake:
+        type: SNOWFLAKE
+        props:
+          worker-id: 123
+
+props:
+  sql-show: true
