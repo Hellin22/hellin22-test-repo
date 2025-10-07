@@ -1,6 +1,7 @@
 package com.hellin22.sharding.config;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -41,9 +42,9 @@ public class DataSourceConfig {
 
     @Bean
     public DataSource routingDataSource(
-            DataSource shard0DataSource,
-            DataSource shard1DataSource,
-            DataSource shard2DataSource) {
+            @Qualifier("shard0DataSource") DataSource shard0DataSource,
+            @Qualifier("shard1DataSource") DataSource shard1DataSource,
+            @Qualifier("shard2DataSource") DataSource shard2DataSource) {
 
         RoutingDataSource routingDataSource = new RoutingDataSource();
 
@@ -58,9 +59,10 @@ public class DataSourceConfig {
         return routingDataSource;
     }
 
-    @Primary
+
     @Bean
-    public DataSource dataSource(DataSource routingDataSource) {
+    @Primary
+    public DataSource dataSource(@Qualifier("routingDataSource") DataSource routingDataSource) {
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 }
