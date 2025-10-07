@@ -1,44 +1,39 @@
 services:
-  mysql-shard0:
-    image: mysql:8.0
-    container_name: mysql-shard0
+  mariadb-shard0:
+    image: mariadb:10.11
+    container_name: mariadb-shard0
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: shard0
     ports:
-      - "3306:3306"
+      - "3310:3306"
     volumes:
       - shard0-data:/var/lib/mysql
       - ./init-shard0.sql:/docker-entrypoint-initdb.d/init.sql
-    command: --default-authentication-plugin=mysql_native_password
 
-  mysql-shard1:
-    image: mysql:8.0
-    container_name: mysql-shard1
+  mariadb-shard1:
+    image: mariadb:10.11
+    container_name: mariadb-shard1
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: shard1
     ports:
-      - "3307:3306"
+      - "3311:3306"
     volumes:
       - shard1-data:/var/lib/mysql
       - ./init-shard1.sql:/docker-entrypoint-initdb.d/init.sql
-    command: --default-authentication-plugin=mysql_native_password
 
-  mysql-shard2:
-    image: mysql:8.0
-    container_name: mysql-shard2
+  mariadb-shard2:
+    image: mariadb:10.11
+    container_name: mariadb-shard2
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: shard2
     ports:
-      - "3308:3306"
+      - "3312:3306"
     volumes:
       - shard2-data:/var/lib/mysql
       - ./init-shard2.sql:/docker-entrypoint-initdb.d/init.sql
-      # 로컬 파일 init.sql을 컨테이너의 /docker-entrypoint-initdb.d/init.sql에 마운트
-      # 컨테이너가 컨테이너 내부 entrypoint의 init.sql을 읽을 때 로컬의 init.sql을 읽는 것
-    command: --default-authentication-plugin=mysql_native_password
 
 volumes:
   shard0-data:

@@ -1,25 +1,30 @@
 spring:
   datasource:
     shard0:
-      jdbc-url: jdbc:mysql://localhost:3306/shard0
+      jdbc-url: jdbc:mariadb://localhost:3310/shard0
       username: root
       password: 1234
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.mariadb.jdbc.Driver
     shard1:
-      jdbc-url: jdbc:mysql://localhost:3307/shard1
+      jdbc-url: jdbc:mariadb://localhost:3311/shard1
       username: root
       password: 1234
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.mariadb.jdbc.Driver
     shard2:
-      jdbc-url: jdbc:mysql://localhost:3308/shard2
+      jdbc-url: jdbc:mariadb://localhost:3312/shard2
       username: root
       password: 1234
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
+
+  sql:
+    init:
+      mode: never

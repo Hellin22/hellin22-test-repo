@@ -22,17 +22,22 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
-    // Apache ShardingSphere
-    implementation 'org.apache.shardingsphere:shardingsphere-jdbc-core:5.4.1'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
+
+    implementation('org.apache.shardingsphere:shardingsphere-jdbc-core:5.4.1')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
-
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 tasks.named('test') {
     useJUnitPlatform()
 }
