@@ -1,30 +1,45 @@
 spring:
-  datasource:
-    shard0:
-      jdbc-url: jdbc:mariadb://localhost:3310/shard0
-      username: root
-      password: 1234
-      driver-class-name: org.mariadb.jdbc.Driver
-    shard1:
-      jdbc-url: jdbc:mariadb://localhost:3311/shard1
-      username: root
-      password: 1234
-      driver-class-name: org.mariadb.jdbc.Driver
-    shard2:
-      jdbc-url: jdbc:mariadb://localhost:3312/shard2
-      username: root
-      password: 1234
-      driver-class-name: org.mariadb.jdbc.Driver
+  shardingsphere:
+    datasource:
+      names: shard0,shard1,shard2
+      shard0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: org.mariadb.jdbc.Driver
+        jdbc-url: jdbc:mariadb://127.0.0.1:3310/shard0
+        username: root
+        password: 1234
+      shard1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: org.mariadb.jdbc.Driver
+        jdbc-url: jdbc:mariadb://127.0.0.1:3311/shard1
+        username: root
+        password: 1234
+      shard2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: org.mariadb.jdbc.Driver
+        jdbc-url: jdbc:mariadb://127.0.0.1:3312/shard2
+        username: root
+        password: 1234
+
+    rules:
+      sharding:
+        tables:
+          users:
+            actual-data-nodes: shard$->{0..2}.users
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: user-inline
+        sharding-algorithms:
+          user-inline:
+            type: INLINE
+            props:
+              algorithm-expression: shard$->{id % 3}
+
+    props:
+      sql-show: true
 
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
-
-  sql:
-    init:
-      mode: never
