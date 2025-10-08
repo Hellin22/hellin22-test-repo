@@ -48,3 +48,4 @@ rules:
 
 props:
   sql-show: true
+  sql-format: true

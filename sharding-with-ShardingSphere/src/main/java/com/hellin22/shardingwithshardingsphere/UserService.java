@@ -14,7 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User createOrder(String userName) {
+    public User createUser(String userName) {
 
         User user = new User(userName);
 
@@ -26,7 +26,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
+    public User getUserByUsername(String username) {
+        return userRepository.findByUserName(username);
+    }
 
-
+    @Transactional
+    public User getuserById(Long userid) {
+        return userRepository.findById(userid).orElse(null);
+    }
 
 }

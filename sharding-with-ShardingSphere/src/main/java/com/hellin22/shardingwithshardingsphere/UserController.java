@@ -15,11 +15,22 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestParam String username) {
-        return userService.createOrder(username);
+        return userService.createUser(username);
     }
 
     @GetMapping
     public List<User> getUsers() {
         return userService.getAllUsers();
     }
+
+    @GetMapping("/by-username")
+    public User getUser(@RequestParam String username) {
+        return userService.getUserByUsername(username);
+    }
+
+    @GetMapping("/by-id")
+    public User getUserById(@RequestParam Long userid) {
+        return userService.getuserById(userid);
+    }
+
 }
